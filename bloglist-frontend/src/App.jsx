@@ -7,6 +7,9 @@ import loginService from './services/login'
 const localStorageUserKey = 'loggedBlogappUser'
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -22,7 +25,9 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {setBlogs(blogs)})
+    blogService.getAll().then((blogs) => {
+      setBlogs(blogs)
+    })
   }, [])
 
   const Blogs = () => (
@@ -32,6 +37,48 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       ))}
     </div>
+  )
+
+  const handleBlogTitleChange = (event) => {
+    setNewBlogTitle(event.target.value)
+  }
+
+  const handleBlogAuthorChange = (event) => {
+    setNewBlogAuthor(event.target.value)
+  }
+
+  const handleBlogUrlChange = (event) => {
+    setNewBlogUrl(event.target.value)
+  }
+
+  const blogForm = () => (
+    <form onSubmit={addBlog}>
+      <div>
+        <label htmlFor='blog-title'>Title</label>
+        <input
+          value={newBlogTitle}
+          name='blog-title'
+          onChange={handleBlogTitleChange}
+        />
+      </div>
+      <div>
+      <label htmlFor='blog-author'>Author</label>
+        <input
+          value={newBlogAuthor}
+          name='blog-author'
+          onChange={handleBlogAuthorChange}
+        />
+      </div>
+      <div>
+      <label htmlFor='blog-url'>URL</label>
+        <input
+          value={newBlogUrl}
+          name='blog-url'
+          onChange={handleBlogUrlChange}
+        />
+      </div>
+      <button type='submit'>create</button>
+    </form>
   )
 
   const loginForm = () => (
@@ -90,14 +137,33 @@ const App = () => {
       }, 5000)
     }
   }
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
+      likes: 0,
+    }
+
+    blogService.create(blogObject).then((blog) => {
+      setBlogs(blogs.concat(blog))
+      setNewBlogTitle('')
+      setNewBlogAuthor('')
+      setNewBlogUrl('')
+    })
+  }
   return (
     <div>
       {!user && loginForm()}
       {user && (
         <div>
           <p>
-            {user.name}({user.username}) logged in <button onClick={handleLogout}>logout</button>
+            {user.name}({user.username}) logged in{' '}
+            <button onClick={handleLogout}>logout</button>
           </p>
+          {blogForm()}
           {Blogs()}
         </div>
       )}
