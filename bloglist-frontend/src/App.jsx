@@ -11,9 +11,12 @@ const App = () => {
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationKind, setNotificationKind] = useState('notification')
+
+  const notficationDuration = 5000 //milliseconds
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem(localStorageUserKey)
@@ -62,7 +65,7 @@ const App = () => {
         />
       </div>
       <div>
-      <label htmlFor='blog-author'>Author</label>
+        <label htmlFor='blog-author'>Author</label>
         <input
           value={newBlogAuthor}
           name='blog-author'
@@ -70,7 +73,7 @@ const App = () => {
         />
       </div>
       <div>
-      <label htmlFor='blog-url'>URL</label>
+        <label htmlFor='blog-url'>URL</label>
         <input
           value={newBlogUrl}
           name='blog-url'
@@ -83,7 +86,6 @@ const App = () => {
 
   const loginForm = () => (
     <div>
-      <Notification message={errorMessage} />
       <h1>log in to application</h1>
       <form onSubmit={handleLogin}>
         <div>
@@ -130,11 +132,19 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setNotificationKind('success')
+      setNotificationMessage(`${username} logged in`)
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        setNotificationKind('')
+        setNotificationMessage(null)
+      }, notficationDuration)
+    } catch (exception) {
+      setNotificationKind('error')
+      setNotificationMessage('Wrong username or password')
+      setTimeout(() => {
+        setNotificationKind('')
+        setNotificationMessage(null)
+      }, notficationDuration)
     }
   }
 
@@ -149,6 +159,14 @@ const App = () => {
 
     blogService.create(blogObject).then((blog) => {
       setBlogs(blogs.concat(blog))
+      setNotificationKind('success')
+      setNotificationMessage(
+        `a new blog ${newBlogTitle} by ${newBlogAuthor} added`
+      )
+      setTimeout(() => {
+        setNotificationKind('')
+        setNotificationMessage(null)
+      }, notficationDuration)
       setNewBlogTitle('')
       setNewBlogAuthor('')
       setNewBlogUrl('')
@@ -156,6 +174,7 @@ const App = () => {
   }
   return (
     <div>
+      <Notification message={notificationMessage} kind={notificationKind} />
       {!user && loginForm()}
       {user && (
         <div>
