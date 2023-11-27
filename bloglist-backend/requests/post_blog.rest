@@ -1,6 +1,6 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4iLCJpZCI6IjY1NjM0NDZkMDFhOGY0ZjY0Nzg4NTU1ZSIsImlhdCI6MTcwMTAwNDQ4OCwiZXhwIjoxNzAxMDA4MDg4fQ.PRr6pIAAA51Fw7WmEYPXiI7LVDCdbdmxuZ0BtAkVZ_w
+Authorization: Bearer xxx
 
 {
   "title": "Test Blog Entry as John Lennon",
