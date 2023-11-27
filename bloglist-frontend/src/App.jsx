@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Toggleable'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -42,74 +45,30 @@ const App = () => {
     </div>
   )
 
-  const handleBlogTitleChange = (event) => {
-    setNewBlogTitle(event.target.value)
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
+      likes: 0,
+    }
+
+    blogService.create(blogObject).then((blog) => {
+      setBlogs(blogs.concat(blog))
+      setNotificationKind('success')
+      setNotificationMessage(
+        `a new blog ${newBlogTitle} by ${newBlogAuthor} added`
+      )
+      setTimeout(() => {
+        setNotificationKind('')
+        setNotificationMessage(null)
+      }, notficationDuration)
+      setNewBlogTitle('')
+      setNewBlogAuthor('')
+      setNewBlogUrl('')
+    })
   }
-
-  const handleBlogAuthorChange = (event) => {
-    setNewBlogAuthor(event.target.value)
-  }
-
-  const handleBlogUrlChange = (event) => {
-    setNewBlogUrl(event.target.value)
-  }
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        <label htmlFor='blog-title'>Title</label>
-        <input
-          value={newBlogTitle}
-          name='blog-title'
-          onChange={handleBlogTitleChange}
-        />
-      </div>
-      <div>
-        <label htmlFor='blog-author'>Author</label>
-        <input
-          value={newBlogAuthor}
-          name='blog-author'
-          onChange={handleBlogAuthorChange}
-        />
-      </div>
-      <div>
-        <label htmlFor='blog-url'>URL</label>
-        <input
-          value={newBlogUrl}
-          name='blog-url'
-          onChange={handleBlogUrlChange}
-        />
-      </div>
-      <button type='submit'>create</button>
-    </form>
-  )
-
-  const loginForm = () => (
-    <div>
-      <h1>log in to application</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type='text'
-            value={username}
-            name='Username'
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type='password'
-            value={password}
-            name='Password'
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type='submit'>login</button>
-      </form>
-    </div>
-  )
 
   function handleLogout() {
     blogService.setToken(null)
@@ -148,41 +107,37 @@ const App = () => {
     }
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-      likes: 0,
-    }
-
-    blogService.create(blogObject).then((blog) => {
-      setBlogs(blogs.concat(blog))
-      setNotificationKind('success')
-      setNotificationMessage(
-        `a new blog ${newBlogTitle} by ${newBlogAuthor} added`
-      )
-      setTimeout(() => {
-        setNotificationKind('')
-        setNotificationMessage(null)
-      }, notficationDuration)
-      setNewBlogTitle('')
-      setNewBlogAuthor('')
-      setNewBlogUrl('')
-    })
-  }
   return (
     <div>
       <Notification message={notificationMessage} kind={notificationKind} />
-      {!user && loginForm()}
+      {!user && (
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      )}
       {user && (
         <div>
           <p>
             {user.name}({user.username}) logged in{' '}
             <button onClick={handleLogout}>logout</button>
           </p>
-          {blogForm()}
+          <Togglable buttonLabel='add blog'>
+            <BlogForm
+              onSubmit={addBlog}
+              title={newBlogTitle}
+              author={newBlogAuthor}
+              url={newBlogUrl}
+              handleTitleChange={({ target }) => setNewBlogTitle(target.value)}
+              handleAuthorChange={({ target }) =>
+                setNewBlogAuthor(target.value)
+              }
+              handleUrlChange={({ target }) => setNewBlogUrl(target.value)}
+            />
+          </Togglable>
           {Blogs()}
         </div>
       )}
