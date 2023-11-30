@@ -37,19 +37,39 @@ const App = () => {
   const incrementLikes = (blog) => {
     blog.likes = blog.likes + 1
     const returnedBlog = blogService.update(blog) //todo update state
-    const updatedBlogs = blogs.map((blog) => {
-      if (blog.id === returnedBlog.id) {
-        return returnedBlog
-      }
-      return blog
-    })
+    const updatedBlogs = blogs
+      .map((blog) => {
+        if (blog.id === returnedBlog.id) {
+          return returnedBlog
+        }
+        return blog
+      })
+      .sort((a, b) => b.likes - a.likes)
     setBlogs(updatedBlogs)
   }
+
+  const deleteBlog = (blogToDelete) => {
+    if (window.confirm(`Remove blog: ${blogToDelete.title}?`)) {
+      blogService.remove(blogToDelete)
+      const updatedBlogs = blogs
+        .filter((blog) => {
+          return blog.id !== blogToDelete.id
+        })
+        .sort((a, b) => b.likes - a.likes)
+      setBlogs(updatedBlogs)
+    }
+  }
+
   const Blogs = () => (
     <div>
       <h2>blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes}/>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          incrementLikes={incrementLikes}
+          deleteBlog={deleteBlog}
+        />
       ))}
     </div>
   )
