@@ -30,15 +30,26 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     })
   }, [])
 
+  const incrementLikes = (blog) => {
+    blog.likes = blog.likes + 1
+    const returnedBlog = blogService.update(blog) //todo update state
+    const updatedBlogs = blogs.map((blog) => {
+      if (blog.id === returnedBlog.id) {
+        return returnedBlog
+      }
+      return blog
+    })
+    setBlogs(updatedBlogs)
+  }
   const Blogs = () => (
     <div>
       <h2>blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} incrementLikes={incrementLikes}/>
       ))}
     </div>
   )
