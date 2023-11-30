@@ -6,7 +6,7 @@ import Blog from './Blog'
 test('renders content', () => {
   const blog = {
     title: 'Test Blog',
-    author: 'testcccc',
+    author: 'Test Author',
     url: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/section',
     likes: 1,
     user: {
@@ -21,8 +21,16 @@ test('renders content', () => {
     username: "John",
     name: "John Lennon"
   }
-  render(<Blog blog={blog} user={user}/>)
+  
+  const { container } = render(<Blog blog={blog} user={user}/>)
 
-  const element = screen.getByText('Test Blog')
-  expect(element).toBeDefined()
+  const titleElement = container.querySelector('.blog-title')
+  expect(titleElement).toBeDefined()
+
+  const authorElement = container.querySelector('.blog-author')
+  expect(authorElement).toBeDefined()
+
+  const urlElement = container.querySelector('.blog-url')
+  expect(urlElement).toBeNull()
+
 })

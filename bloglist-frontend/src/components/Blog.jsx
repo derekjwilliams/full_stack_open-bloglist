@@ -1,18 +1,17 @@
 import { useState } from 'react'
 
 const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
-
-  console.log('-----------------------', JSON.stringify(user))
   const [showDetails, setShowDetails] = useState(false)
   const blogStyle = {
-    paddingTop: 10,
+    padding: '1rem 0',
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
   }
   const itemStyle = {
-    padding: 2,
+    padding: '0.5rem',
+    marginBottom: 5,
   }
 
   return (
@@ -20,30 +19,31 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
       {showDetails && (
         <div>
           <div>
-            <span style={itemStyle}>{blog.title}</span>
-            <span style={itemStyle}>{blog.author}</span>
+            <span style={itemStyle} className='blog-title'>{blog.title}</span>
+            <span style={itemStyle} className='blog-author'>{blog.author}</span>
             <button onClick={() => setShowDetails(false)}>hide</button>
           </div>
-          <div>
+          <div style={itemStyle} >
             <a href={blog.url}>{blog.url}</a>
           </div>
           <div>
-            <span style={itemStyle}>likes: {blog.likes}</span>
+            <label style={itemStyle} htmlFor='blog-likes'>likes:</label>
+            <span style={itemStyle} className='blog-likes' name='blog-likes'>{blog.likes}</span>
             <button onClick={() => incrementLikes(blog)}>like</button>
           </div>
-          <div>
+          <div style={itemStyle}>
             {blog && blog.user && user && user.username === blog.user.username && (
               <button onClick={() => deleteBlog(blog)}>delete</button>
             )}
           </div>
-          <div>{showDetails && blog.user && blog.user.username}</div>
+          <div style={itemStyle} className='blog-username'>{showDetails && blog.user && blog.user.username}</div>
         </div>
       )}
       {!showDetails && (
         <div>
           <div>
-            <span style={itemStyle}>{blog.title}</span>
-            <span style={itemStyle}>{blog.author}</span>
+            <span style={itemStyle} className='blog-title'>{blog.title}</span>
+            <span style={itemStyle} className='blog-author'>{blog.author}</span>
             <button onClick={() => setShowDetails(true)}>show</button>
           </div>
         </div>
