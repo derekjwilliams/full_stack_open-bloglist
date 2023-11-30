@@ -1,13 +1,8 @@
 const Notification = ({ message, kind }) => {
-    if (message === null) {
-      return null
-    }
-  
-    return (
-      <div className={`notification ${kind}`}>
-        {message}
-      </div>
-    )
+  if (message === null) {
+    return null
   }
-  
-  export default Notification;
+  return <div className={`notification ${kind}`}>{message}</div>
+}
+
+export default Notification
