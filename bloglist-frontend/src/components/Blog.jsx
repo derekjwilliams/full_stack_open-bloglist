@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
+
+  console.log('-----------------------', JSON.stringify(user))
   const [showDetails, setShowDetails] = useState(false)
   const blogStyle = {
     paddingTop: 10,
