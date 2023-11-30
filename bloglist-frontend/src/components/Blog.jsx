@@ -51,14 +51,3 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
 }
 
 export default Blog
-
-// {user && (
-//   <div>
-//     <p>
-//       {user.name}({user.username}) logged in{' '}
-//       <button onClick={handleLogout}>logout</button>
-//     </p>
-//     {blogForm()}
-//     {Blogs()}
-//   </div>
-// )}
