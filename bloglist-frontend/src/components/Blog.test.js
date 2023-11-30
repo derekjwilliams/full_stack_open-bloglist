@@ -17,11 +17,11 @@ test('renders content', () => {
     id: '6568889d8c0b6f89f4750588',
   }
   const user = {
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4iLCJpZCI6IjY1NjM0NDZkMDFhOGY0ZjY0Nzg4NTU1ZSIsImlhdCI6MTcwMTM1MzA0MCwiZXhwIjoxNzAxMzU2NjQwfQ.TdGey-jOgfKmGgE4vKIim4xwjuzqXkbPXnLfEYE5yZw",
+    token: "xxx",
     username: "John",
     name: "John Lennon"
   }
-  
+
   const { container } = render(<Blog blog={blog} user={user}/>)
 
   const titleElement = container.querySelector('.blog-title')
@@ -33,4 +33,6 @@ test('renders content', () => {
   const urlElement = container.querySelector('.blog-url')
   expect(urlElement).toBeNull()
 
+  const likesElement = container.querySelector('.blog-likes')
+  expect(likesElement).toBeNull()
 })
