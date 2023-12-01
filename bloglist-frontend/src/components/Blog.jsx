@@ -37,15 +37,17 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
             <span style={itemStyle} className='blog-likes' name='blog-likes'>
               {blog.likes}
             </span>
-            <button data-testid='increment-blog-like' onClick={() => incrementLikes(blog)}>like</button>
+            <button
+              data-testid='increment-blog-like'
+              onClick={() => incrementLikes(blog)}
+            >
+              like
+            </button>
           </div>
           <div style={itemStyle}>
-            {blog &&
-              blog.user &&
-              user &&
-              user.username === blog.user.username && (
-                <button onClick={() => deleteBlog(blog)}>delete</button>
-              )}
+            {blog && blog.user && user && user.username === blog.user.username && (
+              <button onClick={() => deleteBlog(blog)}>delete</button>
+            )}
           </div>
           <div style={itemStyle} className='blog-username'>
             {showDetails && blog.user && blog.user.username}
