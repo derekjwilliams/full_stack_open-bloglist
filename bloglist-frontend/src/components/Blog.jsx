@@ -37,7 +37,7 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
             <span style={itemStyle} className='blog-likes' name='blog-likes'>
               {blog.likes}
             </span>
-            <button onClick={() => incrementLikes(blog)}>like</button>
+            <button data-testid='increment-blog-like' onClick={() => incrementLikes(blog)}>like</button>
           </div>
           <div style={itemStyle}>
             {blog &&
