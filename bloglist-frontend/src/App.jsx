@@ -61,7 +61,7 @@ const App = () => {
   }
 
   const Blogs = () => (
-    <div>
+    <div className='blog-list'>
       <h2>blogs</h2>
       {blogs.map((blog) => (
         <Blog
@@ -147,7 +147,7 @@ const App = () => {
         <div>
           <p>
             {user.name} logged in{' '}
-            <button onClick={handleLogout}>logout</button>
+            <button data-testid='logout-button' onClick={handleLogout}>logout</button>
           </p>
           {blogForm()}
           {Blogs()}

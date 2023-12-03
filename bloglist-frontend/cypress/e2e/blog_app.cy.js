@@ -8,11 +8,16 @@ describe('Bloglist app', function() {
       password: 'abbeyroad'
     }
     cy.request('POST', 'http://localhost:3001/api/users/', user)
+    const user2 = {
+      name: 'Ringo Starr',
+      username: 'Ringo',
+      password: 'yellowsubmarine'
+    }
+    cy.request('POST', 'http://localhost:3001/api/users/', user2)
     cy.visit('http://localhost:5173')
   })
 
   it('Login form is shown', function() {
-
     cy.visit('http://localhost:5173')
     cy.contains('Login')
   })
@@ -100,5 +105,47 @@ describe('Bloglist app', function() {
       cy.get('[data-testid="delete-blog"]').click()
       cy.get('.blog-item').should('not.exist')
     })
+
+    it('Blog cannot be deleted by a different user', function() {
+      cy.get('.toggle-on').click()
+      cy.get('input[name="blog-title"]').type('test blog title')
+      cy.get('input[name="blog-author"]').type('test blog author')
+      cy.get('input[name="blog-url"]').type('https://fullstackopen.com/en/')
+      cy.get('[data-testid="blogform-create-blog"]').click()
+
+      cy.get('[data-testid="logout-button"]').click()
+      cy.get('#username').type('Ringo')
+      cy.get('#password').type('yellowsubmarine')
+      cy.get('#login-button').click()
+
+      cy.get('.blog-item [data-testid="blog-show-details"]').click()
+      cy.get('[data-testid="delete-blog"]').should('not.exist')
+    })
+
+    it('Blogs are sorted by likes', function() {
+      // add a blog
+      cy.get('.toggle-on').click()
+      cy.get('input[name="blog-title"]').type('test blog title')
+      cy.get('input[name="blog-author"]').type('test blog author')
+      cy.get('input[name="blog-url"]').type('https://fullstackopen.com/en/')
+      cy.get('[data-testid="blogform-create-blog"]').click()
+
+      // add a second blog
+      cy.get('.toggle-on').click()
+      cy.get('input[name="blog-title"]').type('test blog title 2')
+      cy.get('input[name="blog-author"]').type('test blog author 2')
+      cy.get('input[name="blog-url"]').type('https://fullstackopen.com')
+      cy.get('[data-testid="blogform-create-blog"]').click()
+
+      cy.get('.blog-item:nth-of-type(1) [data-testid="blog-show-details"]').click()// show 1st blog
+      cy.get('.blog-item:nth-of-type(1) [data-testid="increment-blog-like"]').click() // click the like button
+      cy.get('.blog-item:nth-of-type(2) [data-testid="blog-show-details"]').click()// show 2nd blog
+      cy.get('.blog-item:nth-of-type(2) [data-testid="increment-blog-like"]').click() // click the like button on 2nd blog
+      cy.get('.blog-item:nth-of-type(2) [data-testid="increment-blog-like"]').click() // click the like button 2nd blog, this will change the order
+
+      // verify that the title of the first item is the second blog entry, 'test blog title 2'
+      cy.get('.blog-item:nth-of-type(1)').contains('test blog title 2')
+    })
+
   })
 })
