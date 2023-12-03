@@ -4,7 +4,7 @@ describe('Bloglist app', function() {
     cy.visit('http://localhost:5173')
   })
 
-  it('home page can be opened', function() {
+  it('Login form is shown', function() {
     cy.visit('http://localhost:5173')
     cy.contains('Login')
   })
