@@ -15,7 +15,7 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className='blog-item' style={blogStyle}>
       {showDetails && (
         <div>
           <div>
