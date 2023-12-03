@@ -45,8 +45,16 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
             </button>
           </div>
           <div style={itemStyle}>
-            {blog && blog.user && user && user.username === blog.user.username && (
-              <button onClick={() => deleteBlog(blog)}>delete</button>
+            {blog &&
+              blog.user &&
+              user &&
+              user.username === blog.user.username && (
+              <button
+                data-testid='delete-blog'
+                onClick={() => deleteBlog(blog)}
+              >
+                delete
+              </button>
             )}
           </div>
           <div style={itemStyle} className='blog-username'>
@@ -65,6 +73,7 @@ const Blog = ({ blog, user, incrementLikes, deleteBlog }) => {
             </span>
             <button
               data-testid='blog-show-details'
+              className='blog-show-details'
               onClick={() => setShowDetails(true)}
             >
               show
