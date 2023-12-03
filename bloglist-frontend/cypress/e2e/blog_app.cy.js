@@ -61,6 +61,10 @@ describe('Bloglist app', function() {
       cy.get('input[name="blog-author"]').type('test blog author')
       cy.get('input[name="blog-url"]').type('https://fullstackopen.com/en/')
       cy.get('[data-testid="blogform-create-blog"]').click()
+      cy.contains('test blog title')
+      cy.contains('test blog author')
+      cy.contains('test blog author')
+      cy.contains('[data-testid="blog-show-details"]')
     })
 
     it('Blog creation can be canceled', function() {
@@ -69,6 +73,20 @@ describe('Bloglist app', function() {
       cy.get('input[name="blog-title"]').should('not.be.visible')
       cy.get('input[name="blog-author"]').should('not.be.visible')
       cy.get('input[name="blog-url"]').should('not.be.visible')
+    })
+
+    it.only('Blog can be liked', function() {
+      cy.get('.toggle-on').click()
+      cy.get('input[name="blog-title"]').type('test blog title')
+      cy.get('input[name="blog-author"]').type('test blog author')
+      cy.get('input[name="blog-url"]').type('https://fullstackopen.com/en/')
+      cy.get('[data-testid="blogform-create-blog"]').click()
+
+      cy.get('.blog-item [data-testid="blog-show-details"]').click()
+      cy.get('[data-testid="increment-blog-like"]').click()
+      cy.get('span.blog-likes').contains('1')
+      cy.get('[data-testid="increment-blog-like"]').click()
+      cy.get('span.blog-likes').contains('2')
     })
   })
 
